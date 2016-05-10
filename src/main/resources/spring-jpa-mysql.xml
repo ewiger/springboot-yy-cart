@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/jpa 
+    http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+  <!-- Configure the data source bean -->
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/yycart" />
+        <property name="username" value="yy" />
+        <property name="password" value="yy" />
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="10" />
+  </bean>
+
+
+  <!-- Create default configuration for Hibernate -->
+  <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+    <property name="showSql" value="true"/>
+    <property name="generateDdl" value="true"/>
+    <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+  </bean>
+
+  <!-- Configure the entity manager factory bean -->
+  <bean id="entityManagerFactory" 
+    class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+    <property name="persistenceUnitName" value="JpaPersistenceUnit"/>
+    <property name="jpaProperties">
+        <props>
+            <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+        </props>
+    </property>
+    <!-- Set base package of the entities -->
+    <property name="packagesToScan" value="io.yycart.model"/>
+    <!-- Set share cache mode -->
+    <property name="sharedCacheMode" value="ENABLE_SELECTIVE"/>
+    <!-- Set validation mode -->
+    <property name="validationMode" value="NONE"/> 
+  </bean>
+
+  <!-- Configure the transaction manager bean -->
+  <bean id="transactionManager" 
+    class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+  </bean>
+
+  <!-- Enable annotation driven transaction management -->
+  <tx:annotation-driven mode="aspectj"
+        transaction-manager="transactionManager"/>
+
+  <!-- 
+    Configure Spring Data JPA and set the base package of the 
+    repository interfaces 
+  -->
+  <jpa:repositories base-package="io.yycart.repositories"/>
+  
+  
+</beans>

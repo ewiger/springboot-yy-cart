@@ -1,0 +1,17 @@
+[{ 
+	"_class" : "io.yycart.model.Product",
+ 	"name" : "Apple",
+  	"price" : 0.25
+},{
+	"_class" : "io.yycart.model.Product",
+ 	"name" : "Papaya",
+  	"price" : 0.5
+},{
+	"_class" : "io.yycart.model.Product",
+ 	"name" : "Orange",
+  	"price" : 0.30
+},{
+	"_class" : "io.yycart.model.Product",
+ 	"name" : "Garlic",
+  	"price" : 0.15
+}]

@@ -77,9 +77,9 @@ def main():
     print('Requesting items from: %s' % cost_url)
     res = requests.get(cost_url)
     assert res.status_code == 200
-    # print res.json()
+    # print type(res.json())
     # TODO: make a better test of the potential rounding errors
-    assert res.json() == 2.7
+    assert str(res.json()) == '2.7'
 
 
 if __name__ == '__main__':
